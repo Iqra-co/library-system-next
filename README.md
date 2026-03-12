@@ -38,7 +38,7 @@ A professional digital solution for schools and colleges to manage book inventor
 
 ---
 
-## ⚙️ Quick Setup
+##  Quick Setup
 1. **Backend:** 
    - `cd backend` -> `npm install` -> `npm start`
    - Set `MONGO_URI` and `JWT_SECRET` in `.env`.
