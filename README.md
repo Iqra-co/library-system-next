@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+#  Library Management System (MERN)
 
-## Getting Started
+A professional digital solution for schools and colleges to manage book inventory, student records, and lending operations using the **MERN Stack**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+##  Tech Stack
+- **Frontend:** Next.js 14, TypeScript, Tailwind CSS
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB (Mongoose)
+- **Auth:** JWT (Role-Based: Admin, Staff, Student)
+- **UI Libraries:** SweetAlert2, Swiper.js, Heroicons
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+##  Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+###  Admin & Staff
+- **Dashboard:** Real-time stats (Total Books, Issued Today, Overdue).
+- **Book Management:** Add, Edit, Delete books with **Image Upload**.
+- **Inventory Control:** Automatic sync between Total Quantity and Available stock.
+- **Reports:** Complete issuance logs with **Automated Overdue Alerts**.
+- **User Management:** View and manage library members.
 
-## Learn More
+###  Student Portal
+- **Catalog:** Browse books with categories and real-time availability.
+- **Borrowing:** One-click book issuance system.
+- **My Books:** Track borrowed items, due dates, and return status.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+##  Folder Structure
+- `app/dashboard/` : Shared Layout and Admin stats.
+- `app/dashboard/student/` : Student specific catalog and history.
+- `app/dashboard/books/` : Admin book inventory management.
+- `services/` : Axios API integration for Books, Users, and Borrows.
+- `context/` : Global Auth state management.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## ⚙️ Quick Setup
+1. **Backend:** 
+   - `cd backend` -> `npm install` -> `npm start`
+   - Set `MONGO_URI` and `JWT_SECRET` in `.env`.
+   - Ensure `uploads` folder exists for book covers.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Frontend:**
+   - `cd frontend` -> `npm install` -> `npm run dev`
+   - Set `NEXT_PUBLIC_BACKEND_URL` in `.env`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+**Developed by: [Your Name]**
