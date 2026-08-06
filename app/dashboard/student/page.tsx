@@ -30,12 +30,12 @@ const fetchStats = async () => {
 
   return (
     <div className="p-6 sm:p-10 space-y-10 animate-in fade-in duration-700">
-      <div className="bg-gradient-to-r from-[#0099cc] to-blue-700 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-sky-100 via-slate-100 to-sky-200 rounded-3xl p-8 text-slate-900 shadow-xl relative overflow-hidden">
         <div className="relative z-10">
           <h1 className="text-3xl font-bold uppercase tracking-tight">Welcome Back, {user?.firstName}! </h1>
-          <p className="mt-2 text-blue-100 font-medium">Ready to explore new stories today? Your digital library is just a click away.</p>
+          <p className="mt-2 text-slate-600 font-medium">Ready to explore new stories today? Your digital library is just a click away.</p>
         </div>
-        <HiOutlineBookOpen size={150} className="absolute -right-10 -bottom-10 text-white/10 rotate-12" />
+        <HiOutlineBookOpen size={150} className="absolute -right-10 -bottom-10 text-slate-200/80 rotate-12" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         

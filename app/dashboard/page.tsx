@@ -75,18 +75,18 @@ export default function AdminDashboardPage() {
       }
     }
   };
-  if (authLoading || loading) return <div className="p-10 text-center font-bold text-blue-500 animate-pulse uppercase tracking-widest text-xs">Syncing Library Data...</div>;
+  if (authLoading || loading) return <div className="p-10 text-center font-bold text-slate-500 animate-pulse uppercase tracking-widest text-xs">Syncing Library Data...</div>;
 const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace("/api/v1", "") || "http://localhost:5000";
   return (
-    <div className="p-4 sm:p-6 space-y-8 bg-gray-50 min-h-screen animate-in fade-in duration-500 text-slate-800">
+    <div className="p-4 sm:p-6 space-y-8 bg-slate-50 min-h-screen animate-in fade-in duration-500 text-slate-800">
       <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-4">
-            <div className="bg-blue-500 p-3 rounded-lg text-white">
+            <div className="bg-sky-100 p-3 rounded-lg text-slate-900">
                 <HiOutlineSparkles size={28} />
             </div>
             <div>
                 <h1 className="text-2xl font-bold uppercase italic tracking-tight">
-                    Welcome, <span className="text-blue-500">{user?.firstName} {user?.lastName}</span>
+                    Welcome, <span className="text-slate-900">{user?.firstName} {user?.lastName}</span>
                 </h1>
                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Role: {user?.role} • Logged in at {new Date().toLocaleTimeString()}</p>
             </div>
@@ -99,7 +99,7 @@ const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace("/api/v1", "
         <StatCard label="Total Members" value={stats.totalUsers} icon={<HiOutlineUserGroup size={20}/>} />
       </div>
       <div className="space-y-4">
-  <h2 className="text-sm font-bold text-slate-700 uppercase border-l-4 border-blue-500 pl-3 tracking-widest">New Arrivals</h2>
+  <h2 className="text-sm font-bold text-slate-700 uppercase border-l-4 border-sky-300 pl-3 tracking-widest">New Arrivals</h2>
   <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
     <Swiper
       spaceBetween={20} slidesPerView={1} autoplay={{ delay: 3000 }} pagination={{ clickable: true }} navigation={true}
@@ -112,7 +112,7 @@ const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace("/api/v1", "
         const fullImageUrl = `${backendBaseUrl}/uploads/${imageName}`;
         return (
           <SwiperSlide key={book._id}>
-            <div className="group bg-white rounded border border-slate-200 overflow-hidden hover:border-blue-700 transition-all flex flex-col h-[280px]">
+            <div className="group bg-white rounded border border-slate-200 overflow-hidden hover:border-sky-300 transition-all flex flex-col h-[280px]">
               <div className="h-40 bg-slate-100 flex items-center justify-center overflow-hidden relative">
                 {book.cover ? (
                   <img 
@@ -129,7 +129,7 @@ const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace("/api/v1", "
               </div>
               <div className="p-3 bg-white border-t border-slate-50 flex-grow">
                 <h4 className="text-[11px] font-bold text-slate-800 uppercase line-clamp-2 leading-tight h-8">{book.title}</h4>
-                <p className="text-[9px] text-blue-700 font-bold uppercase mt-2 tracking-widest">{book.category}</p>
+                <p className="text-[9px] text-slate-500 font-bold uppercase mt-2 tracking-widest">{book.category}</p>
               </div>
             </div>
           </SwiperSlide>
@@ -141,7 +141,7 @@ const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace("/api/v1", "
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2">
             <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                <button onClick={() => setIsTableOpen(!isTableOpen)} className="w-full flex items-center justify-between p-4 bg-blue-500 text-white font-bold uppercase tracking-widest text-xs">
+                <button onClick={() => setIsTableOpen(!isTableOpen)} className="w-full flex items-center justify-between p-4 bg-slate-100 text-slate-700 font-bold uppercase tracking-widest text-xs">
                     <span>Lending Records</span>
                     {isTableOpen ? <HiChevronUp size={20} /> : <HiChevronDown size={20} />}
                 </button>
@@ -161,9 +161,9 @@ const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace("/api/v1", "
                                         <td className="p-4 font-bold uppercase text-slate-700">{b.user?.firstName} {b.user?.lastName}</td>
                                         <td className="p-4 uppercase text-slate-500 italic">{b.book?.title}</td>
                                         <td className="p-4 flex justify-center gap-2">
-                                            <Link href="/dashboard/reports" className="p-1.5 bg-blue-50 text-blue-500 rounded hover:bg-blue-600 hover:text-white transition-all"><HiOutlineEye size={16}/></Link>
+                                            <Link href="/dashboard/reports" className="p-1.5 bg-slate-100 text-slate-700 rounded hover:bg-slate-200 transition-all"><HiOutlineEye size={16}/></Link>
                                             {!b.returned && (
-                                                <button onClick={() => handleReturn(b._id)} className="bg-blue-500 text-white px-3 py-1 rounded font-bold text-[9px] uppercase hover:bg-blue-800 transition-all">
+                                                <button onClick={() => handleReturn(b._id)} className="bg-sky-600 text-white px-3 py-1 rounded font-bold text-[9px] uppercase hover:bg-sky-700 transition-all">
                                                     Return
                                                 </button>
                                             )}
@@ -177,14 +177,14 @@ const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace("/api/v1", "
             </div>
         </div>
         <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-            <div className="p-4 bg-blue-500 text-white flex justify-between items-center">
+            <div className="p-4 bg-slate-100 text-slate-900 flex justify-between items-center">
                 <h3 className="text-xs font-bold uppercase tracking-widest">Recent Members</h3>
-                <Link href="/admin/users" className="text-[10px] underline hover:text-blue-400">View All</Link>
+                <Link href="/admin/users" className="text-[10px] underline text-sky-600 hover:text-sky-700">View All</Link>
             </div>
             <div className="p-4 space-y-4">
                 {users.map((u) => (
                     <div key={u._id} className="flex items-center gap-3 border-b border-slate-50 pb-3 last:border-0">
-                        <div className="w-9 h-9 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center">
+                        <div className="w-9 h-9 bg-slate-100 text-slate-700 rounded-full flex items-center justify-center">
                             <HiOutlineUserCircle size={22} />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -201,8 +201,8 @@ const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace("/api/v1", "
 }
 function StatCard({ label, value, icon }: { label: string; value: number; icon: any }) {
   return (
-    <div className="bg-blue-500 text-white p-5 rounded-lg shadow-md flex items-center gap-4 transition-transform hover:scale-105 border-b-4 border-blue-900">
-      <div className="bg-white/20 p-3 rounded-lg">{icon}</div>
+    <div className="bg-white text-slate-900 p-5 rounded-lg shadow-sm flex items-center gap-4 transition-transform hover:scale-[1.01] border border-slate-200">
+      <div className="bg-slate-100 p-3 rounded-lg">{icon}</div>
       <div>
           <p className="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">{label}</p>
           <h3 className="text-3xl font-bold">{value}</h3>

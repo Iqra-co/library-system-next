@@ -9,6 +9,9 @@ export default function EditBookPage() {
   const { id } = useParams(); 
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [selectedPdf, setSelectedPdf] = useState<File | null>(null);
+  const [currentPdfLink, setCurrentPdfLink] = useState<string | null>(null);
   const [form, setForm] = useState({
     title: "",
     author: "",
@@ -21,8 +24,21 @@ export default function EditBookPage() {
     try {
       const res = await getSingleBook(id as string);
       if (res.success) {
-        
-        setForm(res.data || res.book); 
+        const book = res.data || res.book;
+        setForm({
+          title: book.title || "",
+          author: book.author || "",
+          isbn: book.isbn || "",
+          category: book.category || "Historical fiction",
+          quantity: book.quantity || 1,
+        });
+        const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+        if (book.cover) {
+          setPreview(`${backendBaseUrl}/${book.cover.replace(/\\/g, "/")}`);
+        }
+        if (book.pdf) {
+          setCurrentPdfLink(`${backendBaseUrl}/${book.pdf.replace(/\\/g, "/")}`);
+        }
       }
     } catch (err) {
       console.error("Fetch Error:", err);
@@ -33,14 +49,41 @@ export default function EditBookPage() {
   };
   if (id) fetchBookData();
 }, [id]);
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedPdf(file);
+    }
+  };
+
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await updateBook(id as string, form);
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("author", form.author);
+      formData.append("isbn", form.isbn);
+      formData.append("category", form.category);
+      formData.append("quantity", String(form.quantity));
+      const coverInput = document.getElementById("coverInput") as HTMLInputElement | null;
+      if (coverInput?.files?.[0]) {
+        formData.append("coverImage", coverInput.files[0]);
+      }
+      if (selectedPdf) {
+        formData.append("pdf", selectedPdf);
+      }
+      const res = await updateBook(id as string, formData);
       if (res.success) {
         await Swal.fire("Success", "Book updated successfully!", "success");
-        router.push("/books"); 
+        router.push("/books");
       }
     } catch (err: any) {
       Swal.fire("Error", err.response?.data?.message || "Update failed", "error");
@@ -115,6 +158,33 @@ export default function EditBookPage() {
               value={form.quantity}
               onChange={(e) => setForm({...form, quantity: parseInt(e.target.value)})}
             />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Update Cover Image</label>
+            <input
+              id="coverInput"
+              type="file"
+              accept="image/*"
+              onChange={handleCoverChange}
+              className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Upload new PDF</label>
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={handlePdfChange}
+              className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none"
+            />
+            {selectedPdf && <p className="mt-2 text-sm text-slate-600">Selected file: {selectedPdf.name}</p>}
+            {!selectedPdf && currentPdfLink && (
+              <p className="mt-2 text-sm text-slate-600">
+                Current PDF: <a href={currentPdfLink} target="_blank" rel="noreferrer" className="text-blue-700 underline">View file</a>
+              </p>
+            )}
           </div>
 
           <button 

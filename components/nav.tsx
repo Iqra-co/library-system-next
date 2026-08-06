@@ -8,13 +8,14 @@ export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
   return (
     <nav className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 sticky top-0 z-30">
       <div className="flex items-center gap-4">
-<button 
-  onClick={onMenuClick}
-  className="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600"
->
-  <HiMenu size={28} />
-</button>
-  <h1 className="text-lg font-bold text-slate-800 hidden sm:block">
+        {/* FIX: 'lg:hidden' removed to show the button on all screen sizes */}
+        <button 
+          onClick={onMenuClick}
+          className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors"
+        >
+          <HiMenu size={28} />
+        </button>
+        <h1 className="text-lg font-bold text-slate-800 hidden sm:block">
           Library Management System
         </h1>
       </div>

@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthContext } from "../../../context/AuthContext"; 
-import { HiOutlineWrenchScrewdriver, HiOutlineBellAlert, HiOutlineLockClosed } from "react-icons/hi2";
+import { HiOutlineWrenchScrewdriver, HiOutlineBellAlert, HiOutlineLockClosed, HiChevronLeft } from "react-icons/hi2";
 import Swal from "sweetalert2";
 
 export default function SettingsPage() {
+  const router = useRouter();
   const { user } = useAuthContext(); 
   const [settings, setSettings] = useState({
     borrowLimit: 5,
@@ -29,6 +31,9 @@ export default function SettingsPage() {
   };
   return (
     <div className="p-6 space-y-6 animate-in fade-in duration-500">
+      <button onClick={() => router.push('/dashboard')} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#0099cc] font-bold text-xs uppercase">
+        <HiChevronLeft size={18} /> Back to Dashboard
+      </button>
       <h1 className="text-2xl font-bold text-slate-800 uppercase border-l-4 border-[#0099cc] pl-3 tracking-widest">
         System <span className="text-[#0099cc]">Settings</span>
       </h1>

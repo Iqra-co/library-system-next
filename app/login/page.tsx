@@ -20,7 +20,6 @@ export default function LoginPage() {
       try {
     
     await loginUser(email.trim(), password.trim());
-      await loginUser(email.trim(), password.trim());
       Swal.fire({
         title: 'Success!',
         text: 'Login successful',
@@ -42,39 +41,14 @@ export default function LoginPage() {
     }
   };
 
- 
-//   const handleForgotPassword = () => {
-//   Swal.fire({
-//     title: 'Reset Password',
-//     text: 'Enter your registered email address',
-//     input: 'email',
-//     inputPlaceholder: 'email@example.com',
-//     showCancelButton: true,
-//     confirmButtonText: 'Send Reset Link',
-//     confirmButtonColor: '#2563eb',
-//     showLoaderOnConfirm: true,
-//     preConfirm: async (email) => {
-//       try {
-        
-//         const res = await forgotPassword(email);
-//         return res;
-//       } catch (error: any) {
-//         Swal.showValidationMessage(`Request failed: ${error.response?.data?.msg || error.message}`);
-//       }
-//     },
-//     allowOutsideClick: () => !Swal.isLoading()
-//   }).then((result) => {
-//     if (result.isConfirmed) {
-//       Swal.fire('Sent!', 'Please check your email for the reset link.', 'success');
-//     }
-//   });
-// };
-
+ const handleForgotPassword = () => {
+  router.push("/forgot-password"); // Ye user ko email mangne wale page par le jayega
+};
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-center p-4 sm:p-8" 
          style={{ backgroundImage: "url('/girl.jpg')" }}>
-      <div className="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden max-w-5xl w-full bg-white/95 backdrop-blur-md">
+      <div className="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden max-w-5xl w-full bg-white/30 backdrop-blur-md">
         <div className="hidden md:block md:w-[55%]">
           <img 
             src="/design.png" 
@@ -93,19 +67,19 @@ export default function LoginPage() {
                 type="email"
                 required
                 placeholder="Email Address"
-                className="w-full shadow-sm bg-gray-100 p-4 rounded-xl border border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all"
+                className="w-full shadow-sm bg-white/30 p-4 rounded-xl border border-transparent focus:border-blue-500 focus:bg-white/40 outline-none transition-all"
                 onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 type="password"
                 required
                 placeholder="Password"
-                className="w-full shadow-sm bg-gray-100 p-4 rounded-xl border border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all"
+                className="w-full shadow-sm bg-white/30 p-4 rounded-xl border border-transparent focus:border-blue-500 focus:bg-white/40 outline-none transition-all"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             
-            {/* <div className="text-right">
+            <div className="text-right">
               <button 
                 type="button"
                 onClick={handleForgotPassword}
@@ -113,7 +87,7 @@ export default function LoginPage() {
               >
                 Forgot Password?
               </button>
-            </div> */}
+            </div>
 
             <button
               type="submit"

@@ -1,4 +1,4 @@
-import http from "../utils/http";
+import http from "../utils/httpClient";
 export const getAdminReport = async () => {
   const res = await http.get("/admin/report"); 
   return res.data;

@@ -1,113 +1,258 @@
-// // "use client";
+"use client";
 
-// // import { useState } from "react";
-// // import { logoutApi } from "../../services/auth.service";
+import { useState } from "react";
+import Swal from "sweetalert2";
+import http from "../../utils/httpClient";
 
-// // export default function ForgotPassword() {
-// //   const [email, setEmail] = useState("");
+export default function ForgotPasswordPage() {
+  const [step, setStep] = useState<"email" | "questions" | "reset">("email");
+  const [email, setEmail] = useState("");
+  const [answer1, setAnswer1] = useState("");
+  const [answer2, setAnswer2] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-// //   const submit = async (e: any) => {
-// //     e.preventDefault();
+  // Step 1: User enters email
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      Swal.fire({
+        icon: "warning",
+        title: "Email Required",
+        text: "Please enter your email address",
+        confirmButtonColor: "#3B82F6",
+      });
+      return;
+    }
 
-// //     await logoutApi();
+    setLoading(true);
+    try {
+      const response = await http.post("/auth/forgot-password", { email });
+      if (response.data.success) {
+        setStep("questions");
+        Swal.fire({
+          icon: "info",
+          title: "Security Questions",
+          text: "Please answer your security questions",
+          confirmButtonColor: "#3B82F6",
+        });
+      }
+    } catch (err: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.response?.data?.msg || "Email not found",
+        confirmButtonColor: "#EF4444",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-// //     alert("Reset email sent");
-// //   };
+  // Step 2: User verifies security questions
+  const handleQuestionsSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!answer1 || !answer2) {
+      Swal.fire({
+        icon: "warning",
+        title: "Answers Required",
+        text: "Please answer both security questions",
+        confirmButtonColor: "#3B82F6",
+      });
+      return;
+    }
 
-// //   return (
-// //     <form onSubmit={submit}>
-// //       <h1>Forgot Password</h1>
+    setLoading(true);
+    try {
+      const response = await http.post("/auth/verify-security-questions", {
+        email,
+        answer1,
+        answer2,
+      });
 
-// //       <input
-// //         placeholder="Email"
-// //         onChange={(e) => setEmail(e.target.value)}
-// //       />
+      // If questions verified, show password reset form
+      setStep("reset");
+      Swal.fire({
+        icon: "success",
+        title: "Verified!",
+        text: "Now set your new password",
+        confirmButtonColor: "#10B981",
+      });
+    } catch (err: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Verification Failed",
+        text: err.response?.data?.msg || "Security questions answers are incorrect",
+        confirmButtonColor: "#EF4444",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-// //       <button type="submit">Send</button>
-// //     </form>
-// //   );
-// // }
+  // Step 3: User sets new password
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPassword || newPassword.length < 6) {
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid Password",
+        text: "Password must be at least 6 characters",
+        confirmButtonColor: "#3B82F6",
+      });
+      return;
+    }
 
-// "use client";
-// import { useState } from "react";
-// import { useRouter } from "next/navigation";
-// import { http } from "../../utils/http"; 
-// import Swal from "sweetalert2";
+    setLoading(true);
+    try {
+      const response = await http.post("/auth/reset-password-with-questions", {
+        email,
+        answer1,
+        answer2,
+        newPassword,
+      });
 
-// export default function ResetPassword() {
-//   const [formData, setFormData] = useState({ email: "", newPassword: "", confirmPassword: "" });
-//   const [loading, setLoading] = useState(false);
-//   const router = useRouter();
+      if (response.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Password Reset!",
+          text: "Your password has been successfully reset. Please login with your new password.",
+          confirmButtonColor: "#10B981",
+        }).then(() => {
+          window.location.href = "/login";
+        });
+      }
+    } catch (err: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Reset Failed",
+        text: err.response?.data?.msg || "Something went wrong",
+        confirmButtonColor: "#EF4444",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   const handleReset = async (e: React.FormEvent) => {
-//     e.preventDefault();
-    
-//     if (formData.newPassword !== formData.confirmPassword) {
-//       return Swal.fire("Error", "Passwords do not match!", "error");
-//     }
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
+      style={{ backgroundImage: "url('/girl.jpg')" }}
+    >
+      <div className="w-full max-w-md bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-8">
+        <h1 className="text-3xl font-bold text-blue-600 text-center mb-2">
+          Reset Password
+        </h1>
+        <p className="text-gray-600 text-center mb-6 text-sm">
+          {step === "email" && "Enter your email to get started"}
+          {step === "questions" && "Answer your security questions"}
+          {step === "reset" && "Set your new password"}
+        </p>
 
-//     setLoading(true);
-//     try {
-//       // Backend API jo direct password update karegi
-//       const res = await http.post("/auth/reset-password-direct", {
-//         email: formData.email,
-//         password: formData.newPassword
-//       });
+        {/* Step 1: Email */}
+        {step === "email" && (
+          <form onSubmit={handleEmailSubmit} className="space-y-4">
+            <input
+              type="email"
+              className="w-full shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition-all disabled:opacity-50"
+            >
+              {loading ? "Searching..." : "Continue"}
+            </button>
+          </form>
+        )}
 
-//       if (res.data.success) {
-//         await Swal.fire("Success", "Password updated successfully!", "success");
-//         router.push("/login");
-//       }
-//     } catch (err: any) {
-//       Swal.fire("Error", err.response?.data?.msg || "Reset failed", "error");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+        {/* Step 2: Security Questions */}
+        {step === "questions" && (
+          <form onSubmit={handleQuestionsSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Question 1: Your first pet's name?
+              </label>
+              <input
+                type="text"
+                className="w-full shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+                placeholder="Enter answer"
+                value={answer1}
+                onChange={(e) => setAnswer1(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Question 2: Your school's name?
+              </label>
+              <input
+                type="text"
+                className="w-full shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+                placeholder="Enter answer"
+                value={answer2}
+                onChange={(e) => setAnswer2(e.target.value)}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-all disabled:opacity-50"
+            >
+              {loading ? "Verifying..." : "Verify Answers"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setStep("email")}
+              className="w-full text-blue-600 py-2 hover:underline"
+            >
+              Back
+            </button>
+          </form>
+        )}
 
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-//       <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
-//         <h1 className="text-2xl font-bold text-blue-700 uppercase italic mb-6 border-l-4 border-blue-700 pl-3">
-//           Reset <span className="text-slate-800">Password</span>
-//         </h1>
+        {/* Step 3: New Password */}
+        {step === "reset" && (
+          <form onSubmit={handlePasswordReset} className="space-y-4">
+            <input
+              type="password"
+              className="w-full shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+              placeholder="New Password (min 6 characters)"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-all disabled:opacity-50"
+            >
+              {loading ? "Resetting..." : "Reset Password"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setStep("email");
+                setEmail("");
+                setAnswer1("");
+                setAnswer2("");
+                setNewPassword("");
+              }}
+              className="w-full text-blue-600 py-2 hover:underline"
+            >
+              Start Over
+            </button>
+          </form>
+        )}
 
-//         <form onSubmit={handleReset} className="space-y-5">
-//           <div>
-//             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
-//             <input 
-//               required type="email" 
-//               className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20"
-//               onChange={(e) => setFormData({...formData, email: e.target.value})}
-//             />
-//           </div>
-
-//           <div>
-//             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">New Password</label>
-//             <input 
-//               required type="password" 
-//               className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20"
-//               onChange={(e) => setFormData({...formData, newPassword: e.target.value})}
-//             />
-//           </div>
-
-//           <div>
-//             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Confirm New Password</label>
-//             <input 
-//               required type="password" 
-//               className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20"
-//               onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-//             />
-//           </div>
-
-//           <button 
-//             type="submit" disabled={loading}
-//             className="w-full bg-blue-700 text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-blue-800 transition-all shadow-lg shadow-blue-100 disabled:bg-slate-300"
-//           >
-//             {loading ? "UPDATING..." : "UPDATE PASSWORD"}
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Remember your password?{" "}
+          <a href="/login" className="text-blue-600 font-bold hover:underline">
+            Login here
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}

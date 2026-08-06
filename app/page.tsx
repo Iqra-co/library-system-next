@@ -15,17 +15,19 @@ export default function RegisterPage() {
     phoneNo: "",
     role: "student" as UserRole,
     IdNo: "",
+    securityQuestion1: "",
+    securityQuestion2: "",
   });
   const [loading, setLoading] = useState(false);
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { firstName, lastName, email, password, phoneNo, IdNo } = form;
-    if (!firstName || !lastName || !email || !password || !phoneNo || !IdNo) {
+    const { firstName, lastName, email, password, phoneNo, IdNo, securityQuestion1, securityQuestion2 } = form;
+    if (!firstName || !lastName || !email || !password || !phoneNo || !IdNo || !securityQuestion1 || !securityQuestion2) {
       Swal.fire({
         icon: 'warning',
         title: 'Fields Missing',
-        text: 'Please fill all required fields.',
+        text: 'Please fill all required fields including security questions.',
         confirmButtonColor: '#3B82F6'
       });
       setLoading(false);
@@ -48,6 +50,8 @@ export default function RegisterPage() {
         phoneNo: "",
         role: "student",
         IdNo: "",
+        securityQuestion1: "",
+        securityQuestion2: "",
       });
     } catch (err: any) {
       Swal.fire({
@@ -63,7 +67,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center p-4 sm:p-6"
          style={{ backgroundImage: "url('/girl.jpg')" }}>
-      <div className="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden w-full max-w-5xl bg-white/95 backdrop-blur-md min-h-[600px]">
+      <div className="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden w-full max-w-5xl bg-white/30 backdrop-blur-md min-h-[600px]">
                 <div className="hidden md:block md:w-1/2">
           <img
             src="/design.png"
@@ -79,13 +83,13 @@ export default function RegisterPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
-                className="shadow-sm bg-gray-100 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+                className="shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
                 placeholder="First Name"
                 value={form.firstName}
                 onChange={(e) => setForm({ ...form, firstName: e.target.value })}
               />
               <input
-                className="shadow-sm bg-gray-100 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+                className="shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
                 placeholder="Last Name"
                 value={form.lastName}
                 onChange={(e) => setForm({ ...form, lastName: e.target.value })}
@@ -93,14 +97,14 @@ export default function RegisterPage() {
             </div>
             <input
               type="email"
-              className="shadow-sm bg-gray-100 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+              className="shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
               placeholder="Email Address"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
             <input
               type="password"
-              className="shadow-sm bg-gray-100 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+              className="shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
               placeholder="Password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -108,13 +112,13 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
-                className="shadow-sm bg-gray-100 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+                className="shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
                 placeholder="Phone Number"
                 value={form.phoneNo}
                 onChange={(e) => setForm({ ...form, phoneNo: e.target.value })}
               />
               <input
-                className="shadow-sm bg-gray-100 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
+                className="shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
                 placeholder="ID Number"
                 value={form.IdNo}
                 onChange={(e) => setForm({ ...form, IdNo: e.target.value })}
@@ -122,7 +126,7 @@ export default function RegisterPage() {
             </div>
 
             <select
-              className="shadow-sm bg-gray-100 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 cursor-pointer"
+              className="shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 cursor-pointer"
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value as UserRole })}
             >
@@ -130,6 +134,22 @@ export default function RegisterPage() {
               <option value="staff">Staff</option>
               <option value="admin">Admin</option>
             </select>
+
+            <div className="border-t pt-4 mt-2">
+              <p className="text-sm font-semibold text-gray-700 mb-3">Security Questions (for password recovery):</p>
+              <input
+                className="shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 w-full mb-3"
+                placeholder="Answer 1: Your first pet's name?"
+                value={form.securityQuestion1}
+                onChange={(e) => setForm({ ...form, securityQuestion1: e.target.value })}
+              />
+              <input
+                className="shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 w-full"
+                placeholder="Answer 2: Your school's name?"
+                value={form.securityQuestion2}
+                onChange={(e) => setForm({ ...form, securityQuestion2: e.target.value })}
+              />
+            </div>
 
             <button
               type="submit"

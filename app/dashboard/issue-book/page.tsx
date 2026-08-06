@@ -4,6 +4,7 @@ import { getAllBooksAdmin, getAllUsersAdmin } from "@/services/admin.service";
 import { issueBook } from "@/services/borrow.service";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { HiChevronLeft } from "react-icons/hi2";
 
 export default function IssueBookPage() {
   const [books, setBooks] = useState<any[]>([]);
@@ -37,6 +38,9 @@ export default function IssueBookPage() {
 
   return (
     <div className="max-w-2xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-slate-100">
+      <button onClick={() => router.push('/dashboard')} className="inline-flex items-center gap-2 mb-4 text-slate-500 hover:text-[#0099cc] font-bold text-xs uppercase">
+        <HiChevronLeft size={18} /> Back to Dashboard
+      </button>
       <h1 className="text-2xl font-bold text-[#0099cc] uppercase mb-8 border-l-4 border-[#0099cc] pl-3">Issue New Book</h1>
       
       <form onSubmit={handleIssue} className="space-y-6">

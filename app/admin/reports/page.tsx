@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { getAllBorrowsAdmin } from "../../../services/admin.service";
 import { 
   HiOutlineBookOpen, HiOutlineUser, HiOutlineCalendarDays, 
-  HiOutlineCheckCircle, HiOutlineClock, HiOutlineExclamationTriangle 
+  HiOutlineCheckCircle, HiOutlineClock, HiOutlineExclamationTriangle, HiChevronLeft 
 } from "react-icons/hi2";
 export default function ReportsPage() {
+  const router = useRouter();
   const [borrows, setBorrows] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterOverdue, setFilterOverdue] = useState(false);
@@ -30,22 +32,25 @@ export default function ReportsPage() {
 
   if (loading) return (
     <div className="min-h-[400px] flex flex-col items-center justify-center animate-pulse">
-      <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mb-4"></div>
-      <p className="text-blue-500 font-black uppercase tracking-[0.2em] text-xs">Accessing Library Logs...</p>
+      <div className="w-12 h-12 border-4 border-slate-200 border-t-slate-400 rounded-full animate-spin mb-4"></div>
+      <p className="text-slate-500 font-black uppercase tracking-[0.2em] text-xs">Accessing Library Logs...</p>
     </div>
   );
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-4">
+      <button onClick={() => router.push('/dashboard')} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#0099cc] font-bold text-xs uppercase">
+        <HiChevronLeft size={18} /> Back to Dashboard
+      </button>
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="bg-blue-500 p-6 text-white flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="bg-slate-100 p-6 text-slate-900 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-white/10 rounded-lg">
+            <div className="p-2 bg-slate-200 rounded-lg">
               <HiOutlineBookOpen size={28} />
             </div>
             <div>
               <h1 className="text-xl font-black uppercase tracking-[0.15em]">Issuance Reports</h1>
-              <p className="text-blue-100 text-[10px] font-bold uppercase tracking-widest opacity-80">Inventory Circulation Tracking</p>
+              <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest opacity-80">Inventory circulation tracking</p>
             </div>
           </div>
           
@@ -53,8 +58,8 @@ export default function ReportsPage() {
             onClick={() => setFilterOverdue(!filterOverdue)}
             className={`px-6 py-2.5 rounded-xl font-black text-[10px] transition-all flex items-center gap-2 tracking-widest border-2 ${
               filterOverdue 
-              ? "bg-red-500 border-red-400 text-white shadow-lg animate-pulse" 
-              : "bg-white/10 border-white/20 text-white hover:bg-white/20"
+              ? "bg-rose-500 border-rose-400 text-white shadow-md animate-pulse" 
+              : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
             }`}
           >
             <HiOutlineExclamationTriangle size={16} />
@@ -81,7 +86,7 @@ export default function ReportsPage() {
                   <tr key={item._id} className="hover:bg-blue-50/40 transition-colors group">
                     <td className="p-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all">
+                        <div className="w-10 h-10 bg-slate-100 text-slate-700 rounded-xl flex items-center justify-center group-hover:bg-slate-700 group-hover:text-white transition-all">
                           <HiOutlineBookOpen size={20} />
                         </div>
                         <div>
@@ -111,7 +116,7 @@ export default function ReportsPage() {
                           <HiOutlineExclamationTriangle size={14} /> Critical
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black bg-blue-500 text-white shadow-md shadow-blue-100 uppercase tracking-widest ring-2 ring-blue-100">
+                        <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black bg-slate-200 text-slate-900 uppercase tracking-widest ring-2 ring-slate-200">
                           <HiOutlineClock size={14} /> Issuance
                         </span>
                       )}

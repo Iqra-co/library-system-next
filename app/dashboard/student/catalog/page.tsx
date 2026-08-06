@@ -1,10 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getAllBooks } from "@/services/book.service";
-import { HiOutlineBookOpen, HiMagnifyingGlass, HiCheckCircle, HiXCircle } from "react-icons/hi2";
+import { HiOutlineBookOpen, HiMagnifyingGlass, HiCheckCircle, HiXCircle, HiChevronLeft } from "react-icons/hi2";
+import Swal from 'sweetalert2';
+import { requestOnline, getMyBorrowedBooks } from '@/services/borrow.service';
 
 export default function CatalogPage() {
+  const router = useRouter();
   const [books, setBooks] = useState<any[]>([]);
+  const [borrowMap, setBorrowMap] = useState<Record<string, any>>({});
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -18,13 +24,54 @@ export default function CatalogPage() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchBooks(); }, []);
+  const fetchMyBorrows = async () => {
+    try {
+      const res = await getMyBorrowedBooks();
+      if (res.success) {
+        const borrows = res.data || [];
+        const map: Record<string, any> = {};
+        borrows.forEach((b: any) => {
+          if (b.book && b.book._id) {
+            // prefer the latest borrow record for this book
+            map[b.book._id] = (map[b.book._id] && new Date(map[b.book._id].issueDate) > new Date(b.issueDate)) ? map[b.book._id] : b;
+          }
+        });
+        setBorrowMap(map);
+      }
+    } catch (err) { console.error(err); }
+  };
+
+  const handleRequestOnline = async (bookId: string) => {
+    try {
+      const res = await requestOnline(bookId);
+      if (res.success) {
+        Swal.fire({ icon: 'success', title: 'Request Sent', text: res.message || 'Online request sent to admin.' });
+        fetchBooks();
+        fetchMyBorrows();
+      } else {
+        Swal.fire({ icon: 'error', title: 'Request Failed', text: res.message || 'Could not send request.' });
+      }
+    } catch (err: any) {
+      console.error(err);
+      Swal.fire({ icon: 'error', title: 'Error', text: err.response?.data?.message || 'Request failed' });
+    }
+  };
+
+  useEffect(() => { 
+    (async () => {
+      await Promise.all([fetchBooks(), fetchMyBorrows()]);
+    })();
+  }, []);
+
   const filteredBooks = books.filter(b => 
     b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     b.author.toLowerCase().includes(searchTerm.toLowerCase())
   );
   return (
     <div className="p-6 space-y-6 animate-in fade-in duration-500">
+      <button onClick={() => router.push('/dashboard/student')} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#0099cc] font-bold text-xs uppercase">
+        <HiChevronLeft size={18} /> Back to Dashboard
+      </button>
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-800 uppercase border-l-4 border-[#0099cc] pl-3">
@@ -51,6 +98,10 @@ export default function CatalogPage() {
 
             const imageName = book.cover ? book.cover.replace(/\\/g, "/").split("/").pop() : null;
             const fullImageUrl = `${backendBaseUrl}/uploads/${imageName}`;
+
+            const borrowForBook = borrowMap[book._id];
+            const isApprovedOnline = borrowForBook && borrowForBook.status === 'approved' && borrowForBook.borrowType === 'online';
+            const isPending = borrowForBook && borrowForBook.status === 'pending' && borrowForBook.borrowType === 'online';
 
             return (
               <div key={book._id} className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm hover:border-[#0099cc] hover:shadow-md transition-all flex flex-col h-full">
@@ -79,15 +130,25 @@ export default function CatalogPage() {
 
                 <div className="mt-5 pt-4 border-t border-slate-50 flex items-center justify-between">
                   <span className="text-[9px] font-bold text-slate-400 uppercase">Status</span>
-                  {isAvailable ? (
-                    <div className="flex items-center gap-1 text-green-600 font-bold text-[10px] uppercase bg-green-50 px-2 py-1 rounded">
-                      <HiCheckCircle size={14} /> Available ({book.quantity})
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-1 text-red-500 font-bold text-[10px] uppercase bg-red-50 px-2 py-1 rounded">
-                      <HiXCircle size={14} /> Out of Stock
-                    </div>
-                  )}
+                  <div className="flex items-center">
+                    {isAvailable ? (
+                      <div className="flex items-center gap-1 text-green-600 font-bold text-[10px] uppercase bg-green-50 px-2 py-1 rounded">
+                        <HiCheckCircle size={14} /> Available ({book.quantity})
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1 text-red-500 font-bold text-[10px] uppercase bg-red-50 px-2 py-1 rounded">
+                        <HiXCircle size={14} /> Out of Stock
+                      </div>
+                    )}
+
+                    {isApprovedOnline ? (
+                      <Link href={`/borrow/view/${borrowForBook._id}`} className="ml-3 bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold hover:bg-blue-700">Read Online</Link>
+                    ) : isPending ? (
+                      <button disabled className="ml-3 bg-slate-200 text-slate-500 px-3 py-1 rounded text-xs font-bold">Requested (Pending)</button>
+                    ) : isAvailable ? (
+                      <button onClick={() => handleRequestOnline(book._id)} className="ml-3 bg-sky-600 text-white px-3 py-1 rounded text-xs font-bold hover:bg-sky-700">Request Online</button>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             );

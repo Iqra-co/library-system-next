@@ -65,7 +65,7 @@ useEffect(() => {
       case "staff":
         return "/dashboard";
       case "student":
-        return "/student/dashboard";
+        return "/dashboard/student";
       default:
         return "/";
     }

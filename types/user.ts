@@ -31,3 +31,16 @@ export interface AuthResponse {
   token: string;
   user: User;
 }
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  password: string;
+}
+
+export interface SimpleResponse {
+  success: boolean;
+  msg: string;
+  resetUrl?: string; 
+}

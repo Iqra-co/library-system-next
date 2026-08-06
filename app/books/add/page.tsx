@@ -3,7 +3,7 @@ import { useState } from "react";
 import { addBook } from "@/services/book.service";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import { HiOutlineBookOpen, HiOutlineCloudArrowUp } from "react-icons/hi2";
+import { HiOutlineBookOpen, HiOutlineCloudArrowUp, HiChevronLeft } from "react-icons/hi2";
 
 export default function AddBookPage() {
   const [loading, setLoading] = useState(false);
@@ -17,11 +17,18 @@ export default function AddBookPage() {
     quantity: 1,
   });
   const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setCoverImage(file);
       setPreview(URL.createObjectURL(file));
+    }
+  };
+  const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPdfFile(file);
     }
   };
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,6 +43,9 @@ export default function AddBookPage() {
       formData.append("quantity", form.quantity.toString());
       if (coverImage) {
         formData.append("coverImage", coverImage); 
+      }
+      if (pdfFile) {
+        formData.append("pdf", pdfFile);
       }
       const res = await addBook(formData); 
       
@@ -53,6 +63,9 @@ export default function AddBookPage() {
     <div className="min-h-screen bg-slate-50 p-4 sm:p-8 flex items-center justify-center">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden border border-slate-100">
         <div className="bg-blue-500 p-6 text-white flex items-center gap-3">
+          <button type="button" onClick={() => router.push('/dashboard')} className="p-2 rounded-md bg-white/20 hover:bg-white/30 text-white flex items-center justify-center">
+            <HiChevronLeft size={20} />
+          </button>
           <HiOutlineBookOpen size={28} />
           <h1 className="text-xl font-bold uppercase tracking-widest text-white">Add New Book Entity</h1>
         </div>
@@ -77,6 +90,11 @@ export default function AddBookPage() {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Book Title</label>
               <input required className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none font-bold text-slate-700 focus:border-blue-700"
                 placeholder="Enter title" onChange={(e) => setForm({...form, title: e.target.value})} />
+            </div>
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Upload PDF (optional)</label>
+              <input type="file" accept="application/pdf" onChange={handlePdfChange} className="w-full mt-1 p-2 bg-slate-50 border border-slate-200 rounded-lg outline-none text-sm" />
+              {pdfFile && <p className="mt-2 text-sm text-slate-600 font-medium">Selected: {pdfFile.name}</p>}
             </div>
 
             <div>

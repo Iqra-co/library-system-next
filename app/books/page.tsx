@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { 
   HiChevronDown, HiChevronUp, HiMagnifyingGlass, 
   HiArrowPath, HiPlus, HiOutlineAdjustmentsHorizontal,
-  HiOutlinePencilSquare, HiOutlineTrash
+  HiOutlinePencilSquare, HiOutlineTrash, HiChevronLeft
 } from "react-icons/hi2";
 
 export default function BookListPage() {
@@ -61,6 +61,9 @@ export default function BookListPage() {
     });
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
+      <button onClick={() => router.push('/dashboard')} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#0099cc] font-bold text-xs uppercase">
+        <HiChevronLeft size={18} /> Back to Dashboard
+      </button>
       <h1 className="text-2xl font-bold text-center text-[#0099cc] uppercase tracking-widest">
         Book List
       </h1>

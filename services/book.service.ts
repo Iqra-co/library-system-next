@@ -1,4 +1,4 @@
-import http from "../utils/http";
+import http from "../utils/httpClient";
 import { Book, AddBookRequest, BookResponse, Issuance, IssuanceResponse, IssueBookRequest } from "../types/books";
 
 export async function addBook(payload: FormData): Promise<BookResponse> {

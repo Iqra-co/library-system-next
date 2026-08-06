@@ -1,18 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AuthProvider } from "../context/AuthContext";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar"; // Case-sensitivity ka dhyan rakhein
 import Navbar from "../components/nav";
 import Footer from "../components/footer";
-
 import "./globals.css";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  // Desktop par default me sidebar open (expanded) rahega
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
   const pathname = usePathname();
   const noLayoutPages = ["/login", "/register", "/"]; 
-const isAuthPage = noLayoutPages.includes(pathname);
+  const isAuthPage = noLayoutPages.includes(pathname);
+
   return (
     <html lang="en">
       <body>
@@ -22,17 +24,19 @@ const isAuthPage = noLayoutPages.includes(pathname);
               {children}
             </div>
           ) : (
-<div className="flex min-h-screen bg-gray-50 overflow-x-hidden">
-  <Sidebar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} />
-  
-  <div className="flex-1 flex flex-col min-w-0 w-full">
-    <Navbar onMenuClick={() => setSidebarOpen(true)} />
-    <main className="flex-1 p-4 sm:p-8 w-full">
-      {children}
-    </main>
-    <Footer />
-  </div>
-</div>
+            // Flex box container height screen par lock kiya gaya hai
+            <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
+              <Sidebar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} />
+              
+              <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+                {/* Click karne par true/false (toggle) hoga */}
+                <Navbar onMenuClick={() => setSidebarOpen(!isSidebarOpen)} />
+                <main className="flex-1 p-4 sm:p-8 overflow-y-auto w-full">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+            </div>
           )}
         </AuthProvider>
       </body>

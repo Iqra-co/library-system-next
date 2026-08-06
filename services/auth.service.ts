@@ -1,4 +1,4 @@
-import http from "../utils/http";
+import http from "../utils/httpClient";
 import type { User, AuthResponse, RegisterRequest, UserSummary } from "../types/user";
 
 export async function register(payload: RegisterRequest): Promise<AuthResponse> {
@@ -21,5 +21,9 @@ export const getProfile = async () => {
 };
 export const forgotPassword = async (email: string) => {
   const res = await http.post("/auth/forgot-password", { email });
+  return res.data;
+};
+export const resetPassword = async (token: string, password: string) => {
+  const res = await http.patch(`/auth/reset-password/${token}`, { password });
   return res.data;
 };
