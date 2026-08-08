@@ -5,7 +5,6 @@ import { useAuthContext } from "../../context/AuthContext";
 import Swal from "sweetalert2";
 import Link from "next/link"; 
 import { useRouter } from "next/navigation";
-import { forgotPassword } from "@/services/auth.service";
 
 export default function LoginPage() {
   const { loginUser } = useAuthContext();
@@ -17,9 +16,8 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-      try {
-    
-    await loginUser(email.trim(), password.trim());
+    try {
+      await loginUser(email.trim(), password.trim());
       Swal.fire({
         title: 'Success!',
         text: 'Login successful',
@@ -27,8 +25,6 @@ export default function LoginPage() {
         timer: 1500,
         showConfirmButton: false,
       });
-       
-   
     } catch (err: any) {
       Swal.fire({
         title: 'Error!',
@@ -41,49 +37,53 @@ export default function LoginPage() {
     }
   };
 
- const handleForgotPassword = () => {
-  router.push("/forgot-password"); // Ye user ko email mangne wale page par le jayega
-};
+  const handleForgotPassword = () => {
+    router.push("/forgot-password");
+  };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-center p-4 sm:p-8" 
+    <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-center p-3 sm:p-6 md:p-8 overflow-hidden" 
          style={{ backgroundImage: "url('/girl.jpg')" }}>
-      <div className="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden max-w-5xl w-full bg-white/30 backdrop-blur-md">
-        <div className="hidden md:block md:w-[55%]">
+      
+      <div className="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden w-full max-w-5xl bg-white/40 backdrop-blur-md md:max-h-[92vh]">
+        
+        <div className="hidden md:block md:w-1/2">
           <img 
             src="/design.png" 
-            className="h-full w-full object-cover min-h-[500px]" 
+            className="h-full w-full object-cover max-h-[92vh]" 
             alt="design" 
           />
         </div>
-        <div className="w-full md:w-[45%] p-8 sm:p-14 flex flex-col justify-center">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-            <div className="text-center mb-2">
-              <h1 className="text-4xl font-extrabold text-blue-600 mb-2">Welcome</h1>
-              <p className="text-gray-500 font-medium">Please login to your account</p>
+
+        <div className="w-full md:w-1/2 p-5 sm:p-8 flex flex-col justify-center overflow-y-auto max-h-[85vh] md:max-h-[92vh] scrollbar-thin">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 sm:gap-4">
+            <div className="text-center mb-1">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-blue-600 tracking-tight">Welcome</h1>
+              <p className="text-gray-600 text-xs sm:text-sm mt-0.5 font-medium">Please login to your account</p>
             </div>
-            <div className="space-y-4">
+            
+            <div className="space-y-3">
               <input
                 type="email"
                 required
                 placeholder="Email Address"
-                className="w-full shadow-sm bg-white/30 p-4 rounded-xl border border-transparent focus:border-blue-500 focus:bg-white/40 outline-none transition-all"
+                className="w-full shadow-sm bg-white/60 p-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 text-sm transition-all placeholder:text-gray-400"
                 onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 type="password"
                 required
                 placeholder="Password"
-                className="w-full shadow-sm bg-white/30 p-4 rounded-xl border border-transparent focus:border-blue-500 focus:bg-white/40 outline-none transition-all"
+                className="w-full shadow-sm bg-white/60 p-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 text-sm transition-all placeholder:text-gray-400"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             
-            <div className="text-right">
+            <div className="text-right -mt-1">
               <button 
                 type="button"
                 onClick={handleForgotPassword}
-                className="text-sm text-blue-600 hover:underline font-semibold"
+                className="text-xs sm:text-sm text-blue-600 hover:underline font-semibold transition-all"
               >
                 Forgot Password?
               </button>
@@ -92,16 +92,17 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-blue-700 active:scale-95 transition-all ${loading ? 'opacity-50' : ''}`}
+              className={`w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-base shadow-md hover:bg-blue-700 hover:shadow-lg active:scale-[0.98] transition-all ${loading ? 'opacity-50' : ''}`}
             >
               {loading ? "Logging in..." : "LOGIN"}
             </button>
-            <div className="text-center mt-4">
-              <p className="text-gray-600">
+            
+            <div className="text-center mt-1">
+              <p className="text-xs sm:text-sm text-gray-600">
                 Don't have an account?{" "}
                 <Link 
                   href="/" 
-                  className="text-blue-600 font-bold hover:text-blue-800 hover:underline transition"
+                  className="text-blue-600 font-bold hover:text-blue-800 hover:underline transition-all"
                 >
                   Create Account
                 </Link>

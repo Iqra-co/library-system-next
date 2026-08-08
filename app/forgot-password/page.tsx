@@ -136,123 +136,129 @@ export default function ForgotPasswordPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
-      style={{ backgroundImage: "url('/girl.jpg')" }}
-    >
-      <div className="w-full max-w-md bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-8">
-        <h1 className="text-3xl font-bold text-blue-600 text-center mb-2">
-          Reset Password
-        </h1>
-        <p className="text-gray-600 text-center mb-6 text-sm">
-          {step === "email" && "Enter your email to get started"}
-          {step === "questions" && "Answer your security questions"}
-          {step === "reset" && "Set your new password"}
-        </p>
-
-        {/* Step 1: Email */}
-        {step === "email" && (
-          <form onSubmit={handleEmailSubmit} className="space-y-4">
-            <input
-              type="email"
-              className="w-full shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition-all disabled:opacity-50"
-            >
-              {loading ? "Searching..." : "Continue"}
-            </button>
-          </form>
-        )}
-
-        {/* Step 2: Security Questions */}
-        {step === "questions" && (
-          <form onSubmit={handleQuestionsSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Question 1: Your first pet's name?
-              </label>
-              <input
-                type="text"
-                className="w-full shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
-                placeholder="Enter answer"
-                value={answer1}
-                onChange={(e) => setAnswer1(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Question 2: Your school's name?
-              </label>
-              <input
-                type="text"
-                className="w-full shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
-                placeholder="Enter answer"
-                value={answer2}
-                onChange={(e) => setAnswer2(e.target.value)}
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-all disabled:opacity-50"
-            >
-              {loading ? "Verifying..." : "Verify Answers"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setStep("email")}
-              className="w-full text-blue-600 py-2 hover:underline"
-            >
-              Back
-            </button>
-          </form>
-        )}
-
-        {/* Step 3: New Password */}
-        {step === "reset" && (
-          <form onSubmit={handlePasswordReset} className="space-y-4">
-            <input
-              type="password"
-              className="w-full shadow-sm bg-white/30 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200"
-              placeholder="New Password (min 6 characters)"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-all disabled:opacity-50"
-            >
-              {loading ? "Resetting..." : "Reset Password"}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setStep("email");
-                setEmail("");
-                setAnswer1("");
-                setAnswer2("");
-                setNewPassword("");
-              }}
-              className="w-full text-blue-600 py-2 hover:underline"
-            >
-              Start Over
-            </button>
-          </form>
-        )}
-
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Remember your password?{" "}
-          <a href="/login" className="text-blue-600 font-bold hover:underline">
-            Login here
-          </a>
-        </p>
-      </div>
+  className="min-h-screen w-full flex items-center justify-center bg-cover bg-center p-3 sm:p-6 md:p-8 overflow-hidden"
+  style={{ backgroundImage: "url('/girl.jpg')" }}
+>
+  <div className="w-full max-w-md bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl p-5 sm:p-8 overflow-y-auto max-h-[90vh] scrollbar-thin">
+    <div className="text-center mb-1">
+      <h1 className="text-2xl sm:text-3xl font-extrabold text-blue-600 tracking-tight">
+        Reset Password
+      </h1>
+      <p className="text-gray-600 text-xs sm:text-sm mt-1 mb-4 font-medium">
+        {step === "email" && "Enter your email to get started"}
+        {step === "questions" && "Answer your security questions"}
+        {step === "reset" && "Set your new password"}
+      </p>
     </div>
+
+    {step === "email" && (
+      <form onSubmit={handleEmailSubmit} className="space-y-3.5">
+        <input
+          type="email"
+          required
+          className="w-full shadow-sm bg-white/60 p-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 text-sm transition-all placeholder:text-gray-400"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-base shadow-md hover:bg-blue-700 hover:shadow-lg active:scale-[0.98] transition-all disabled:opacity-50"
+        >
+          {loading ? "Searching..." : "Continue"}
+        </button>
+      </form>
+    )}
+
+    {step === "questions" && (
+      <form onSubmit={handleQuestionsSubmit} className="space-y-3.5">
+        <div className="space-y-1.5">
+          <label className="block text-xs font-bold text-gray-700">
+            Question 1: Your first pet's name?
+          </label>
+          <input
+            type="text"
+            required
+            className="w-full shadow-sm bg-white/60 p-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 text-sm transition-all placeholder:text-gray-400"
+            placeholder="Enter answer"
+            value={answer1}
+            onChange={(e) => setAnswer1(e.target.value)}
+          />
+        </div>
+        <div className="space-y-1.5">
+          <label className="block text-xs font-bold text-gray-700">
+            Question 2: Your school's name?
+          </label>
+          <input
+            type="text"
+            required
+            className="w-full shadow-sm bg-white/60 p-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 text-sm transition-all placeholder:text-gray-400"
+            placeholder="Enter answer"
+            value={answer2}
+            onChange={(e) => setAnswer2(e.target.value)}
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-base shadow-md hover:bg-blue-700 hover:shadow-lg active:scale-[0.98] transition-all disabled:opacity-50"
+        >
+          {loading ? "Verifying..." : "Verify Answers"}
+        </button>
+        <button
+          type="button"
+          onClick={() => setStep("email")}
+          className="w-full text-xs font-bold text-blue-600 py-1 hover:underline transition-all"
+        >
+          Back
+        </button>
+      </form>
+    )}
+
+    {step === "reset" && (
+      <form onSubmit={handlePasswordReset} className="space-y-3.5">
+        <input
+          type="password"
+          required
+          className="w-full shadow-sm bg-white/60 p-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 text-sm transition-all placeholder:text-gray-400"
+          placeholder="New Password (min 6 characters)"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-base shadow-md hover:bg-blue-700 hover:shadow-lg active:scale-[0.98] transition-all disabled:opacity-50"
+        >
+          {loading ? "Resetting..." : "Reset Password"}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setStep("email");
+            setEmail("");
+            setAnswer1("");
+            setAnswer2("");
+            setNewPassword("");
+          }}
+          className="w-full text-xs font-bold text-blue-600 py-1 hover:underline transition-all"
+        >
+          Start Over
+        </button>
+      </form>
+    )}
+
+    <div className="text-center mt-4 border-t border-gray-200/60 pt-3">
+      <p className="text-xs sm:text-sm text-gray-600">
+        Remember your password?{" "}
+        <a href="/login" className="text-blue-600 font-bold hover:text-blue-800 hover:underline transition-all">
+          Login here
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+
   );
 }

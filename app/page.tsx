@@ -67,39 +67,35 @@ export default function RegisterPage() {
   }
 
   return (
-    // overflow-hidden lagaya taake main screen par kabhi scroll na aaye
-    <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-center p-2 sm:p-4 overflow-hidden"
+    <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-center p-3 sm:p-6 md:p-8"
          style={{ backgroundImage: "url('/girl.jpg')" }}>
       
-      {/* Box ki height ko fully flexible kar diya aur inner content ke liye scroll open rakha agar screen bohat choti ho */}
-      <div className="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden w-full max-w-5xl bg-white/30 backdrop-blur-md max-h-[90vh]">
+      <div className="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden w-full max-w-5xl bg-white/40 backdrop-blur-md md:max-h-[92vh]">
         
-        {/* Left side design image */}
         <div className="hidden md:block md:w-1/2">
           <img
             src="/design.png"
             alt="Design"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover max-h-[92vh]"
           />
         </div>
 
-        {/* Right side form: Padding thoda set kiya taake spacing badi rahe aur height bhi na barhe */}
-        <div className="w-full md:w-1/2 p-4 sm:p-8 flex flex-col justify-center overflow-y-auto max-h-[90vh]">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <div className="w-full md:w-1/2 p-5 sm:p-8 flex flex-col justify-center overflow-y-auto max-h-[85vh] md:max-h-[92vh] scrollbar-thin">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-2.5 sm:gap-3.5">
             <div className="text-center mb-1">
-              <h1 className="text-2xl sm:text-3xl font-bold text-blue-600">Create Account</h1>
-              <p className="text-gray-600 text-xs sm:text-sm">Join the Library System</p>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-blue-600 tracking-tight">Create Account</h1>
+              <p className="text-gray-600 text-xs sm:text-sm mt-0.5">Join the Library System</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5">
               <input
-                className="shadow-sm bg-white/50 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm"
+                className="shadow-sm bg-white/60 p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm transition-all placeholder:text-gray-400"
                 placeholder="First Name"
                 value={form.firstName}
                 onChange={(e) => setForm({ ...form, firstName: e.target.value })}
               />
               <input
-                className="shadow-sm bg-white/50 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm"
+                className="shadow-sm bg-white/60 p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm transition-all placeholder:text-gray-400"
                 placeholder="Last Name"
                 value={form.lastName}
                 onChange={(e) => setForm({ ...form, lastName: e.target.value })}
@@ -108,7 +104,7 @@ export default function RegisterPage() {
 
             <input
               type="email"
-              className="shadow-sm bg-white/50 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm"
+              className="shadow-sm bg-white/60 p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm transition-all placeholder:text-gray-400"
               placeholder="Email Address"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -116,21 +112,21 @@ export default function RegisterPage() {
 
             <input
               type="password"
-              className="shadow-sm bg-white/50 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm"
+              className="shadow-sm bg-white/60 p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm transition-all placeholder:text-gray-400"
               placeholder="Password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5">
               <input
-                className="shadow-sm bg-white/50 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm"
+                className="shadow-sm bg-white/60 p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm transition-all placeholder:text-gray-400"
                 placeholder="Phone Number"
                 value={form.phoneNo}
                 onChange={(e) => setForm({ ...form, phoneNo: e.target.value })}
               />
               <input
-                className="shadow-sm bg-white/50 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm"
+                className="shadow-sm bg-white/60 p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 text-sm transition-all placeholder:text-gray-400"
                 placeholder="ID Number"
                 value={form.IdNo}
                 onChange={(e) => setForm({ ...form, IdNo: e.target.value })}
@@ -138,7 +134,7 @@ export default function RegisterPage() {
             </div>
 
             <select
-              className="shadow-sm bg-white/50 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 cursor-pointer text-sm"
+              className="shadow-sm bg-white/60 p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 cursor-pointer text-sm transition-all text-gray-700"
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value as UserRole })}
             >
@@ -147,32 +143,34 @@ export default function RegisterPage() {
               <option value="admin">Admin</option>
             </select>
 
-            <div className="border-t pt-3 mt-1">
-              <p className="text-xs font-semibold text-gray-700 mb-2">Security Questions (for password recovery):</p>
-              <input
-                className="shadow-sm bg-white/50 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 w-full mb-2 text-sm"
-                placeholder="Answer 1: Your first pet's name?"
-                value={form.securityQuestion1}
-                onChange={(e) => setForm({ ...form, securityQuestion1: e.target.value })}
-              />
-              <input
-                className="shadow-sm bg-white/50 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 w-full text-sm"
-                placeholder="Answer 2: Your school's name?"
-                value={form.securityQuestion2}
-                onChange={(e) => setForm({ ...form, securityQuestion2: e.target.value })}
-              />
+            <div className="border-t border-gray-200/60 pt-2.5 mt-1">
+              <p className="text-xs font-bold text-gray-700 mb-2">Security Questions (for password recovery):</p>
+              <div className="flex flex-col gap-2">
+                <input
+                  className="shadow-sm bg-white/60 p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 w-full text-sm transition-all placeholder:text-gray-400"
+                  placeholder="Answer 1: Your first pet's name?"
+                  value={form.securityQuestion1}
+                  onChange={(e) => setForm({ ...form, securityQuestion1: e.target.value })}
+                />
+                <input
+                  className="shadow-sm bg-white/60 p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-400 border border-gray-200 w-full text-sm transition-all placeholder:text-gray-400"
+                  placeholder="Answer 2: Your school's name?"
+                  value={form.securityQuestion2}
+                  onChange={(e) => setForm({ ...form, securityQuestion2: e.target.value })}
+                />
+              </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className={`w-full bg-blue-600 text-white py-2.5 rounded-lg font-bold text-base shadow-lg hover:bg-blue-700 transition-all mt-1 active:scale-95 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-base shadow-md hover:bg-blue-700 hover:shadow-lg transition-all mt-1 active:scale-[0.98] ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {loading ? "REGISTERING..." : "REGISTER"}
             </button>
             <p className="text-center text-xs text-gray-600 mt-1">
               Already have an account?{" "}
-              <a href="/login" className="text-blue-600 font-bold hover:underline">Login here</a>
+              <a href="/login" className="text-blue-600 font-bold hover:underline transition-all">Login here</a>
             </p>
           </form>
         </div>
